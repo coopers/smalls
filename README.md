@@ -11,4 +11,4 @@ Access customer information while looking at their support ticket.
 Please submit bug reports to [support@foodQ.com](). Pull requests are welcome.
 
 ### Screenshot(s):
-[]
+[![smalls](https://github.com/coopers/smalls/blob/master/assets/screenshot.png)](#smalls)
