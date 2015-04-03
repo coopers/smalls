@@ -4,7 +4,7 @@ Access customer information while looking at their support ticket.
 
 ### The following information is displayed:
 
-* Website
+* Customer Website
 * Customer Ticket Count
 * Links to Customer Tickets
 
