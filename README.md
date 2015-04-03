@@ -1,14 +1,14 @@
-# App name
+# smalls
 
-[brief description of the app]
+Access customer information while looking at their support ticket.
 
 ### The following information is displayed:
 
-* info1
-* info2
-* info3
+* Website
+* Customer Ticket Count
+* Links to Customer Tickets
 
-Please submit bug reports to [Insert Link](). Pull requests are welcome.
+Please submit bug reports to [support@foodQ.com](). Pull requests are welcome.
 
 ### Screenshot(s):
-[put your screenshots down here.]
+[]
