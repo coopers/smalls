@@ -46,18 +46,18 @@
 
     formatTickets: function(data) {
       data.tickets = data.tickets.reverse();
-      this.listTicketsByStatus(data)
-      this.satisfactionBoolean(data)
+      this.listTicketsByStatus(data);
+      this.satisfactionBoolean(data);
       this.setTicketsId(data);
-      for (i = 0; i < data.tickets.length; i++) {
+      for (var i = 0; i < data.tickets.length; i++) {
         this.formatTicketDate(data.tickets[i]);
         this.setTicketIndex(data.tickets[i], i);
       }
     },
 
     satisfactionBoolean: function(data) {
-      for (i = 0; i < data.tickets.length; i++) {
-        if (data.tickets[i].satisfaction_rating != undefined) {
+      for (var i = 0; i < data.tickets.length; i++) {
+        if (data.tickets[i].satisfaction_rating !== undefined) {
           if (data.tickets[i].satisfaction_rating.score != 'unoffered') {
             data.tickets[i].satisfaction_offered = true;
           }
@@ -68,9 +68,9 @@
     listTicketsByStatus: function(data) {
       var statusPriority = ["new", "open", "pending", "hold", "solved", "closed"];
       var ticketsListedByStatus = [];
-      for (state in statusPriority) {
-        var state = statusPriority[state];
-        for (i = 0; i < data.tickets.length; i++) {
+      for (var state in statusPriority) {
+        state = statusPriority[state];
+        for (var i = 0; i < data.tickets.length; i++) {
           if (data.tickets[i].status == state) {
             ticketsListedByStatus.push(data.tickets[i]);
           }
@@ -110,7 +110,7 @@
               function(tickets_data) {
                 data.tickets = tickets_data.tickets;
                 data.user.ticketCount = tickets_data.tickets.length;
-                this.formatTickets(data)
+                this.formatTickets(data);
                 this.switchTo('requester', data);
               }
             );
