@@ -46,8 +46,8 @@
 
     formatTickets: function(data) {
       data.tickets = data.tickets.reverse();
-      this.satisfactionBoolean(data)
       this.listTicketsByStatus(data)
+      this.satisfactionBoolean(data)
       this.setTicketsId(data);
       for (i = 0; i < data.tickets.length; i++) {
         this.formatTicketDate(data.tickets[i]);

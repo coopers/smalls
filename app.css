@@ -8,11 +8,14 @@
   padding-left: 6px;
 }
 
-.ticket_preview {
+.ticket_button {
   margin-top: 15px;
-  padding: 15px;
   border-style: solid;
   border-width: 4px;
   border-radius: 2px;
   border-color: #EDEDED;
+}
+
+.ticket_content {
+  padding: 15px;
 }
