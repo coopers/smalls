@@ -1,0 +1,57 @@
+<table>
+  <tr>
+    <td>Name:</td>
+    <td class="data"><a href="../../users/{{user.id}}" target="_blank">{{user.name}}</a></td>
+  </tr>
+  {{#if user.organization_id}}
+  <tr>
+    <td>Website:</td>
+    <td class="data"><a href="http://{{user.organization_url}}" target="_blank">{{user.organization_url}}</a></td>
+  </tr>
+  {{/if}}
+  <tr>
+    <td>Since:</td>
+    <td class="data">{{user.created_at}}</td>
+  </tr>
+  <tr>
+    <td>Tickets:</td>
+    <td class="data"><a href="../../agent/tickets/{{ticketsId}}/requester/requested_tickets" target="_blank">{{user.ticketCount}}</a></td>
+  </tr>
+</table>
+{{#each tickets}}
+<div class="ticket_preview"><a href="../../tickets/{{id}}" target="_blank">
+  <table>
+    <tr>
+      <td>Ticket {{index}}</a></td>
+    </tr>
+    <tr>
+      <td>Status:</td>
+      <td class="data">{{status}}</td>
+    </tr>
+    <tr>
+      <td>Created:</td>
+      <td class="data">{{created_at}}</td>
+    </tr>
+    {{#if type}}
+      <tr>
+        <td>Type:</td>
+        <td class="data">{{type}}</td>
+      </tr>
+    {{/if}}
+    {{#if satisfaction_offered}}
+      <tr>
+        <td>Satisfied:</td>
+        <td class="data">{{satisfaction_rating.score}}</td>
+      </tr>
+    {{/if}}
+    <tr>
+      <td>Subject:</td>
+      <td class="data">{{subject}}</td>
+    </tr>
+    <tr>
+      <td>Desc:</td>
+      <td class="data">{{description}}</td>
+    </tr>
+  </table>
+</div>
+{{/each}}
