@@ -17,10 +17,18 @@
     <td>Tickets:</td>
     <td class="data"><a href="../../agent/tickets/{{ticketsId}}/requester/requested_tickets" target="_blank">{{user.ticketCount}}</a></td>
   </tr>
+  {{#each user.ticketCounts}}
+    <tr>
+      <td>{{name}}</td>
+      <td class="data">{{count}}</td>
+    </tr>
+  {{/each}}
 </table>
 {{#each tickets}}
 <div class="ticket_button"><a href="../../tickets/{{id}}" target="_blank">
   <div class="ticket_content">
+    <div class="type {{status}}">
+    </div>
     <table>
       <tr>
         <td>Ticket {{index}}</a></td>
@@ -37,12 +45,6 @@
         <tr>
           <td>Type:</td>
           <td class="data">{{type}}</td>
-        </tr>
-      {{/if}}
-      {{#if satisfaction_offered}}
-        <tr>
-          <td>Satisfied:</td>
-          <td class="data">{{satisfaction_rating.score}}</td>
         </tr>
       {{/if}}
       <tr>

@@ -19,3 +19,42 @@
 .ticket_content {
   padding: 15px;
 }
+
+.type {
+  height: 20px;
+  width: 20px;
+  margin-top: 15px;
+  border-radius: 10px;
+}
+
+.new {
+  background-color: blue;
+}
+
+.open {
+  background-color: purple;
+}
+
+.pending {
+  background-color: yellow;
+}
+
+.hold {
+  background-color: maroon;
+}
+
+.solved {
+  background-color: silver;
+}
+
+.closed {
+  background-color: black;
+}
+
+.good {
+  background-color: green;
+}
+
+.bad {
+  background-color: red;
+}

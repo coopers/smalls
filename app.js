@@ -46,8 +46,9 @@
 
     formatTickets: function(data) {
       data.tickets = data.tickets.reverse();
+      this.setTicketSatisfactionStatus(data);
       this.listTicketsByStatus(data);
-      this.satisfactionBoolean(data);
+      this.setStatusCounts(data);
       this.setTicketsId(data);
       for (var i = 0; i < data.tickets.length; i++) {
         this.formatTicketDate(data.tickets[i]);
@@ -55,18 +56,36 @@
       }
     },
 
-    satisfactionBoolean: function(data) {
-      for (var i = 0; i < data.tickets.length; i++) {
-        if (data.tickets[i].satisfaction_rating !== undefined) {
-          if (data.tickets[i].satisfaction_rating.score != 'unoffered') {
-            data.tickets[i].satisfaction_offered = true;
-          }
+    setTicketSatisfactionStatus: function(data) {
+      var tickets = data.tickets
+      for (var i = 0; i < tickets.length; i++) {
+        var ticket = tickets[i]
+        var feedback = this.getTicketFeedback(ticket)
+        var acceptableFeedback = ['good', 'bad']
+        if (this.contains(acceptableFeedback, feedback)) {
+          ticket.status = feedback;
         }
       }
     },
 
+    getTicketFeedback: function(ticket) {
+      if (ticket.satisfaction_rating !== undefined) {
+        return ticket.satisfaction_rating.score
+      }
+      return false
+    },
+
+    contains: function(collection, value) {
+      for (var i = 0; i < collection.length; i++) {
+        if (collection[i] === value) {
+          return true;
+        }
+      }
+      return false;
+    },
+
     listTicketsByStatus: function(data) {
-      var statusPriority = ["new", "open", "pending", "hold", "solved", "closed"];
+      var statusPriority = ["new", "open", "pending", "hold", "solved", "closed", "good", "bad"];
       var ticketsListedByStatus = [];
       for (var state in statusPriority) {
         state = statusPriority[state];
@@ -77,6 +96,36 @@
         }
       }
       data.tickets = ticketsListedByStatus;
+    },
+
+    setStatusCounts: function(data) {
+      data.user.ticketCounts = this.getStatusCounts(data)
+    },
+
+    getStatusCounts: function(data) {
+      var tickets = data.tickets
+      var statusCollection = {}
+      for (var i = 0; i < tickets.length; i++) {
+        var status = tickets[i].status      
+        if (statusCollection.hasOwnProperty(status)) {
+          statusCollection[status]++;
+        } else {
+          statusCollection[status] = 1;
+        }
+      }
+      return this.packageStatusCounts(statusCollection);
+    },
+
+    packageStatusCounts: function(statusCollection) {
+      var statusCounts = [];
+      for (status in statusCollection) {
+        var statusCount = statusCollection[status]
+        var statusObj = {};
+        statusObj["name"] = status;
+        statusObj["count"] = statusCount;
+        statusCounts.push(statusObj);
+      }
+      return statusCounts;
     },
 
     setTicketsId: function(data) {
