@@ -1,61 +1,56 @@
-<table>
-  <tr>
-    <td>Name:</td>
-    <td class="data"><a href="../../users/{{user.id}}" target="_blank">{{user.name}}</a></td>
-  </tr>
-  {{#if user.organization_id}}
-  <tr>
-    <td>Website:</td>
-    <td class="data"><a href="http://{{user.organization_url}}" target="_blank">{{user.organization_url}}</a></td>
-  </tr>
-  {{/if}}
-  <tr>
-    <td>Since:</td>
-    <td class="data">{{user.created_at}}</td>
-  </tr>
-  <tr>
-    <td>Tickets:</td>
-    <td class="data"><a href="../../agent/tickets/{{ticketsId}}/requester/requested_tickets" target="_blank">{{user.ticketCount}}</a></td>
-  </tr>
-  {{#each user.ticketCounts}}
-    <tr>
-      <td>{{name}}</td>
-      <td class="data">{{count}}</td>
-    </tr>
-  {{/each}}
-</table>
-{{#each tickets}}
-<div class="ticket_button"><a href="../../tickets/{{id}}" target="_blank">
-  <div class="ticket_content">
-    <div class="type {{status}}">
+<div class="userButton">
+  <a href="../../users/{{user.id}}" target="_blank">
+    <div class="userContent">
+      <div class="userImage"></div>
+      <div class="userName">{{user.name}}</div>
     </div>
-    <table>
-      <tr>
-        <td>Ticket {{index}}</a></td>
-      </tr>
-      <tr>
-        <td>Status:</td>
-        <td class="data">{{status}}</td>
-      </tr>
-      <tr>
-        <td>Created:</td>
-        <td class="data">{{created_at}}</td>
-      </tr>
-      {{#if type}}
-        <tr>
-          <td>Type:</td>
-          <td class="data">{{type}}</td>
-        </tr>
-      {{/if}}
-      <tr>
-        <td>Subject:</td>
-        <td class="data">{{subject}}</td>
-      </tr>
-      <tr>
-        <td>Desc:</td>
-        <td class="data">{{description}}</td>
-      </tr>
-    </table>
+  </a>
+</div>
+
+{{#if user.organization_id}}
+<div class="organizationField">
+  <div class="organizationImage"></div>
+  <div class="organizationURLS">
+    <div class="organizationURL">
+      <a href="http://{{user.organization_url}}" target="_blank">
+        <p class="domain">{{user.organization_url}}</p>
+      </a>
+    </div>
   </div>
 </div>
+{{/if}}
+
+<div class="userSinceField">
+  <div class="userImage"></div>
+  <div class="userCreated">{{user.created_at}}</div>
+</div>
+
+<div class="clear"></div>
+
+<div class="ticketsButton">
+  <a href="../../agent/tickets/{{ticketsId}}/requester/requested_tickets" target="_blank">
+    <div class="ticketsContent">
+      <div class="userImage"></div>
+      <p class="ticketCount">{{user.ticketCount}}</p>
+    </div>
+  </a>
+</div>
+
+<div class="clear"></div>
+
+<div class="statusCounts">
+  {{#each user.ticketCounts}}
+    <div class="statusCount {{name}} {{cssPercentString}}"></div>
+  {{/each}}
+</div>
+
+{{#each tickets}}
+  <div class="ticket_button button{{status}}"><a href="../../tickets/{{id}}" target="_blank">
+    <div class="status {{status}}">
+      <p class="statusName ticketHeader">{{status}}</p>
+      <p class="date ticketHeader">{{created_at}}</p>
+    </div>
+    <div class="subject">{{subject}}</div>
+    <div class="description">{{description}}</div>
+  </div>
 {{/each}}

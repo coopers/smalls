@@ -38,9 +38,7 @@
 
     formatDates: function(data) {
       var cdate = new Date(data.user.created_at);
-      var ldate = new Date(data.user.last_login_at);
       data.user.created_at = cdate.toLocaleDateString();
-      data.user.last_login_at = ldate.toLocaleString();
       return data;
     },
 
@@ -52,7 +50,6 @@
       this.setTicketsId(data);
       for (var i = 0; i < data.tickets.length; i++) {
         this.formatTicketDate(data.tickets[i]);
-        this.setTicketIndex(data.tickets[i], i);
       }
     },
 
@@ -90,8 +87,9 @@
       for (var state in statusPriority) {
         state = statusPriority[state];
         for (var i = 0; i < data.tickets.length; i++) {
-          if (data.tickets[i].status == state) {
-            ticketsListedByStatus.push(data.tickets[i]);
+          var ticket = data.tickets[i]
+          if (ticket.status == state) {
+            ticketsListedByStatus.push(ticket);
           }
         }
       }
@@ -105,27 +103,57 @@
     getStatusCounts: function(data) {
       var tickets = data.tickets
       var statusCollection = {}
-      for (var i = 0; i < tickets.length; i++) {
-        var status = tickets[i].status      
+      var ticketCount = tickets.length
+      for (var i = 0; i < ticketCount; i++) {
+        var ticket = tickets[i]
+        var status = ticket.status      
         if (statusCollection.hasOwnProperty(status)) {
           statusCollection[status]++;
         } else {
           statusCollection[status] = 1;
         }
       }
-      return this.packageStatusCounts(statusCollection);
+      return this.packageStatusCounts(statusCollection, ticketCount);
     },
 
-    packageStatusCounts: function(statusCollection) {
+    packageStatusCounts: function(statusCollection, ticketCount) {
       var statusCounts = [];
       for (status in statusCollection) {
         var statusCount = statusCollection[status]
         var statusObj = {};
         statusObj["name"] = status;
         statusObj["count"] = statusCount;
+        statusObj["percentOfTickets"] = Math.floor(statusCount/ticketCount*100);
         statusCounts.push(statusObj);
       }
+      this.statusCountsMustBe100(statusCounts)
       return statusCounts;
+    },
+
+    statusCountsMustBe100: function(statusCounts) {
+      var percentTarget = 100;
+      var percentTotal  = 0;
+      var percentDiff   = 0;
+      for (var i = 0; i < statusCounts.length; i++) {
+        var statusCount = statusCounts[i]
+        percentTotal = percentTotal + statusCount.percentOfTickets
+      }
+      percentDiff = percentTarget - percentTotal
+      for (var i = 0; i < percentDiff; i++) {
+        statusCount = statusCounts[i]
+        statusCount.percentOfTickets++
+      }
+      for (var i = 0; i < statusCounts.length; i++) {
+        statusCount = statusCounts[i]
+        var percent = statusCount.percentOfTickets
+        statusCount["cssPercentString"] = this.setCSSPercentString(percent);
+      }
+      return statusCounts;
+    },
+
+    setCSSPercentString: function(percent) {
+      percent = "_" + percent.toString();
+      return percent
     },
 
     setTicketsId: function(data) {
@@ -133,12 +161,39 @@
     },
 
     formatTicketDate: function(ticket) {
-      var tdate = new Date(ticket.created_at);
-      ticket.created_at = tdate.toLocaleDateString();
-    },
+      var ticketDate = new Date(ticket.created_at);
+      var currentTime = Date.now()
+      var diff = Math.floor((currentTime.valueOf() - ticketDate.valueOf()) / 1000)
 
-    setTicketIndex: function(ticket, index) {
-      ticket.index = index + 1;
+      function Time(max, divisor, string) {
+        this.max     = max;
+        this.divisor = divisor;
+        this.string  = string;
+      }
+
+      var seconds = new Time(60, 1, "seconds");
+      var minutes = new Time(60*60, 60, "minutes");
+      var hours   = new Time(60*60*24, 60*60, "hours");
+      var days    = new Time(60*60*24*30, 60*60*24, "days");
+      
+      var timeCollection = [];
+      timeCollection.push(seconds);
+      timeCollection.push(minutes);
+      timeCollection.push(hours);
+      timeCollection.push(days);
+
+      for (var time in timeCollection) {
+        time = timeCollection[time];
+        if (diff < time.max) {
+          var increment = Math.floor(diff / time.divisor);
+          increment = increment.toString() + " " + time.string + " ago";
+          ticket.created_at = increment;
+          return ticket;
+        }
+      }
+
+      ticket.created_at = ticketDate.toLocaleDateString();
+      return ticket;
     },
 
     getInfo: function() {
@@ -160,6 +215,7 @@
                 data.tickets = tickets_data.tickets;
                 data.user.ticketCount = tickets_data.tickets.length;
                 this.formatTickets(data);
+                console.log(data.user.ticketCounts);
                 this.switchTo('requester', data);
               }
             );
